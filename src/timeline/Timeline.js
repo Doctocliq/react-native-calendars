@@ -44,7 +44,7 @@ export default class Timeline extends React.PureComponent {
     super(props);
 
     const {start, end} = this.props;
-    this.calendarHeight = (end - start) * 100;
+    this.calendarHeight = (end - start) * 200;
 
     this.style = styleConstructor(props.styles, this.calendarHeight);
 
@@ -106,12 +106,10 @@ export default class Timeline extends React.PureComponent {
       }
 
       return [
-        <Text key={`timeLabel${i}`} style={[this.style.timeLabel, {top: offset * index - 6}]}>
+        <Text key={`timeLabel${i}`} style={[this.style.timeLabel, i === start && { marginTop: 20 }, {top: offset * index - 6}]}>
           {timeText}
         </Text>,
-        i === start ? null : (
-          <View key={`line${i}`} style={[this.style.line, {top: offset * index, width: dimensionWidth - EVENT_DIFF}]} />
-        ),
+        <View key={`line${i}`} style={[this.style.line, {top: offset * index, width: dimensionWidth - EVENT_DIFF}]} />,
         <View
           key={`lineHalf${i}`}
           style={[this.style.line, {top: offset * (index + 0.5), width: dimensionWidth - EVENT_DIFF}]}
@@ -146,8 +144,8 @@ export default class Timeline extends React.PureComponent {
         <TouchableOpacity
           activeOpacity={0.9}
           onPress={() => this._onEventTapped(this.props.events[event.index])}
-          key={i}
           style={[this.style.event, style]}
+          key={i}
         >
           {this.props.renderEvent ? (
             this.props.renderEvent(event)
