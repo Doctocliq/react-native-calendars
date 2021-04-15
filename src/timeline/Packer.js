@@ -1,9 +1,9 @@
 // @flow
 import moment from 'moment';
 
-const offset = 200;
+// const offset = 200;
 
-function buildEvent(column, left, width, dayStart) {
+function buildEvent(column, left, width, dayStart, offset) {
   const startTime = moment(column.start);
   const endTime = column.end ? moment(column.end) : startTime.clone().add(1, 'hour');
   const dayStartTime = startTime.clone().hour(dayStart).minute(0);
@@ -37,7 +37,7 @@ function expand(ev, column, columns) {
   return colSpan;
 }
 
-function pack(columns, width, calculatedEvents, dayStart) {
+function pack(columns, width, calculatedEvents, dayStart, hourHeight) {
   let colLength = columns.length;
 
   for (let i = 0; i < colLength; i++) {
@@ -47,12 +47,12 @@ function pack(columns, width, calculatedEvents, dayStart) {
       const L = (i / colLength) * width;
       const W = (width * colSpan) / colLength - 10;
 
-      calculatedEvents.push(buildEvent(col[j], L, W, dayStart));
+      calculatedEvents.push(buildEvent(col[j], L, W, dayStart, hourHeight));
     }
   }
 }
 
-function populateEvents(events, screenWidth, dayStart) {
+function populateEvents(events, screenWidth, dayStart, hourHeight) {
   let lastEnd;
   let columns;
   let calculatedEvents = [];
@@ -72,7 +72,7 @@ function populateEvents(events, screenWidth, dayStart) {
 
   events.forEach(function (ev) {
     if (lastEnd !== null && ev.start >= lastEnd) {
-      pack(columns, screenWidth, calculatedEvents, dayStart);
+      pack(columns, screenWidth, calculatedEvents, dayStart, hourHeight);
       columns = [];
       lastEnd = null;
     }
@@ -97,7 +97,7 @@ function populateEvents(events, screenWidth, dayStart) {
   });
 
   if (columns.length > 0) {
-    pack(columns, screenWidth, calculatedEvents, dayStart);
+    pack(columns, screenWidth, calculatedEvents, dayStart, hourHeight);
   }
   return calculatedEvents;
 }

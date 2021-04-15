@@ -44,12 +44,12 @@ export default class Timeline extends React.PureComponent {
     super(props);
 
     const {start, end} = this.props;
-    this.calendarHeight = (end - start) * 200;
+    this.calendarHeight = (end - start) * props.hourHeight;
 
     this.style = styleConstructor(props.styles, this.calendarHeight);
 
     const width = dimensionWidth - LEFT_MARGIN;
-    const packedEvents = populateEvents(props.events, width, start);
+    const packedEvents = populateEvents(props.events, width, start, props.hourHeight);
     let initPosition = _.min(_.map(packedEvents, 'top')) - this.calendarHeight / (end - start);
     const verifiedInitPosition = initPosition < 0 ? 0 : initPosition;
 
