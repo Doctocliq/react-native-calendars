@@ -55,7 +55,8 @@ export default class Timeline extends React.PureComponent {
 
     this.state = {
       _scrollY: verifiedInitPosition,
-      packedEvents
+      packedEvents,
+      hourHeight: props.hourHeight
     };
   }
 
@@ -65,15 +66,14 @@ export default class Timeline extends React.PureComponent {
     const {events, start = 0} = this.props;
 
     if (prevEvents !== events || prevStart !== start) {
+      const packedEvents = populateEvents(events, width, start, this.state.hourHeight)
       this.setState({
-        packedEvents: populateEvents(events, width, start)
+        packedEvents: packedEvents
       });
     }
   }
 
-  componentDidMount() {
-    this.props.scrollToFirst && this.scrollToFirst();
-  }
+  componentDidMount() {}
 
   scrollToFirst() {
     setTimeout(() => {
